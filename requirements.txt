@@ -1,0 +1,16 @@
+# Web runtime
+flask
+flask-cors
+gunicorn
+
+# Config & models
+pyyaml
+pydantic
+
+# HTTP & OpenAI
+httpx
+openai
+
+SQLAlchemy           # db engine + pooling
+psycopg2-binary      # postgres driver
+#

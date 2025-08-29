@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: LigaData MCP Gateway
+  version: 1.0.0
+servers:
+  - url: https://drawing-margin-bigger-baseline.trycloudflare.com
+paths: #
+  /mcp/route:
+    post:
+      operationId: routePrompt
+      summary: Route a natural-language prompt to MCP services and return results
+      x-openai-isConsequential: false
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/routeRequest'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/routeResponse'
+        "400":
+          description: Bad Request
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-ligadata-api-key
+  schemas:
+    routeRequest:
+      type: object
+      required: [userPrompt]
+      properties:
+        userPrompt:
+          type: string
+          description: Original user prompt from ChatGPT to route to MCP tools
+        requestId:
+          type: string
+          description: Optional correlation id for tracing
+        context:
+          type: object
+          additionalProperties: true
+          description: Optional extra context (user, session, locale)
+    routeResponse:
+      type: object
+      required: [handled, display]
+      properties:
+        handled:
+          type: boolean
+          description: Whether the prompt matched a known MCP service
+        display:
+          type: string
+          description: Markdown/plaintext to show directly in ChatGPT UI
+        data:
+          type: object
+          additionalProperties: true
+          description: Structured payload for follow-up turns/tools

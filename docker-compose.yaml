@@ -1,0 +1,21 @@
+version: "3.9"                                           
+
+services:                                                
+  mcpGateway:                                            
+    build: .                                             
+    image: mcp-gpt-gateway:latest                        
+    container_name: mcp-gpt-gateway                      
+    ports:
+      - "8080:8080"                                      
+    environment:
+      PYTHONUNBUFFERED: "1"            #                  
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro               
+      - ./ai/aiRouterPrompt.yaml:/app/ai/aiRouterPrompt.yaml:ro  
+    healthcheck:                                         
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]  
+      interval: 30s                                      
+      timeout: 5s                                       
+      retries: 3                                         
+      start_period: 10s                                  
+    restart: unless-stopped                              

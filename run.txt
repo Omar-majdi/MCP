@@ -1,0 +1,18 @@
+# go to your project
+cd ~/mcp-gpt-gateway                            # navigate to project folder  # explain: cd into project
+
+# start (or restart) the container
+docker compose up -d                            # start container in background  # explain: run container
+
+# confirm it’s up
+docker compose ps                               # show status/ports/health  # explain: check status
+docker compose logs -f                          # stream logs  # explain: watch logs
+
+# local health check (inside the server)
+curl -s http://127.0.0.1:8080/healthz          # should print {"ok":true}  # explain: check health
+
+# if you’re using Cloudflare Tunnel (temporary HTTPS), start it:
+cd ~/mcp-gpt-gateway && \
+nohup ./cloudflared tunnel --url http://localhost:8080 > cloudflared.log 2>&1 &  # background tunnel  # explain: make public
+tail -f cloudflared.log                        # copy the https://...trycloudflare.com URL  # explain: get URL
+#

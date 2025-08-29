@@ -1,0 +1,33 @@
+task: >
+  You are a routing function that converts a natural-language request into a strict JSON
+  object describing the user's intent and extracted arguments.
+
+instructions: |
+  - Read the user's raw text carefully.
+  - Supported intents: ["segCreate","listSegments"] only.
+  - If the user asks to list/show/get segments, set intent="listSegments".
+  - Decide the intent from the supported list.
+  - If the intent is "segCreate", extract the "segmentName".
+  - Be strict: if unsure, set intent="unknown" and leave fields empty.
+  - Output ONLY compact JSON (no code fences, no commentary).
+
+supportedIntents:
+  - segCreate
+  - listSegments #
+
+schemaExample: |
+  {
+    "intent": "segCreate",
+    "segmentName": "VIP Customers",
+    "confidence": 0.96
+  }, {"intent":"listSegments","confidence":0.95}
+
+edgeCases: |
+  - If multiple names appear, prefer the most explicit after the word "named".
+  - Strip surrounding quotes from the name if present.
+  - If no clear name is present, use intent="unknown".
+
+outputConstraints: |
+  - Must be valid JSON.
+  - Keys: intent, segmentName, confidence.
+  - confidence is a float from 0 to 1.
